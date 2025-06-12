@@ -1,0 +1,609 @@
+----Columns Status/ Modifications----
+---Jobs Data---
+uic:                No modifications
+job_seq:            No modifications (possible variable for join)
+action_taken_code:  Removed, found vairables conveying similar information. Action_taken also has same distribution, i.e code 1 = Maintenance action completed; parts drawn from supply. Each has 13750
+alt_closing:        Removed, >99% NA 
+alt_opening:        Removed, >99% NA 
+apl:                < 5% NA, left as is (need to handle in next phase of data cleaning)
+cause_code:         No modifications
+cdm_rin:            ~ 20% NA, left at is (need to handle in next phase of data cleaning)
+csmp_narrative_summary: 14 NAs. Replaced NA with 'Unknown'
+date_closing:       No modifications
+date_maintenance_action: No modifications
+deferral_reason_code: 24 NAs. Replaced with mode = 2.0
+due_date:           ~ 20% NA, left as is (need to handle in next phase of data cleaning)
+eic:                10 NAs, replaced with most common value (>27000 occurances)
+equipment_nomenclature: 1 NA, Replaced with 'Unknown'
+eswbs_closing:      Same value as eswbs_opening for all but 20 non NA values, removed
+eswbs_opening:      No modifications
+identification_number_closing: 19883 NAs, replaced with 'UNKNOWN' because there were already values = 'UNKNOWN' for this variable 
+insurv_number:      99% NA, removed
+insurv_suffix:      99% NA, removed
+integrated_priority: 85% NA, majority of non NA values are the same value. Removed 
+iuc_screening_code: 20663 NAs, replaced with 0 to represent its own category
+jcn                 - remove, redundant information with other columns (uic, job sequence, work center)
+mhc                 - 0 NA's, as is, 16 distinct numbers
+mho                 - 0 NA's, as is, 25 distinct numbers
+mhr                 - 592 NA's, replaced NA's with the median
+priority_code       - 25 missing, replaced NA's with mode
+safety_code         - 42,702 NA's, converted to binary (0=safe, 1=not safe)
+status_code         - 1 NA, replaced with 0 (code for not applicable)
+tycom_screening_code - 9,026 NA's (19%), replaced with 0 (placeholder for empty records)
+type_availability_code - 25 NA's, replaced with mode
+type_of_maintenance_action - 0 NA's, as is, 2 distinct (D,N)
+when_discovered_code - 0 NA's, as is, 10 distinct
+work_center         - 0 NA's, 240 distinct (EA03 - 19%), as is
+total_ima_man_hours - 79 NA's, as is
+total_ship_force_man_hours - 79 NA's, replaced with mho + mhc
+total_replacement_cost - 79 NA's, as is
+total_repair_replacement_cost - 79 NA's, as is
+def_narrative       - 13,501 NA's, replaced with 'Unknown', preprocessing handled later
+nondef_narrative - 22,501 NA's, replaced with 'Unknown', preprocessing handled later
+closing_narrative - 26,364 NA's, replaced with 'Unknown', preprocessing handled later
+ima_narrative       - 46,059 NA's, replaced with 'Unknown', preprocessing handled later
+total_material_cost - 33,191 NA's (70%), 1 record had a value of $700k, as is
+UsedinMerit         - remove, all values are uniform (false)
+configurationItemId - remove, unique id number
+opening_ship_system - 0 NA's, changed data type to string
+closing_ship_system - 11705 NA's, filled NA's with 'Unknown'
+days_open           - 0 NA's but there were around 10/20 negative values, replaced negative values with the median of the postive values, and treated outliers
+action_taken        - 11830 NA's, converted datatype to string, filled NA's with 'Unknown', applied NLP (tokenization, remove stop words, and lemmatization)
+intermediate_unit_commander_screening - 20663 NA's, converted datatype to string, filled NA's with 'Unknown'
+priority            - 25 NA's, converted datatype to string, filled NA's with mode instead of making an 'Unknown' bc very little NA's
+component_status    - 1 NA, converted datatype to string, filled NA with mode
+type_of_availability_needed - 25 NA's, converted datatype to string, filled NA's with mode
+tycom_screening     - 9031 NA's, converted datatype to string, filled NA's with mode
+when_discovered     - NA's taken care of (mode)
+cause               - 0 NA, converted datatype to string, applied NLP (tokenization, remove stop words, and lemmatization)
+deferral_reason     - 24 NA's,  converted datatype to string, filled NA's with mode
+feasible_with_ship_inventory - boolean, no NA's
+feasible_with_additional_dla_inventory - boolean, no NA'
+ship_readiness_effect - Got rid of, no value according to Dan
+assigned            - remove, only 1 unique value
+casrep_filed        - remove, only 1 unique value
+ship                - no NA's, changed datatype to string
+
+---Supply Data---
+
+jcn                 - removed, information included in uic, work center, and jsn
+uic                 - no NA's, changed datatype from object to int
+work_center         - no NA's, changed datatype to string
+jsn                 - no NA's, changed datatype to string
+date_maintenance_action - no NA's, changed to data-time format
+date_closing        - 849 NA's, replaced NA's with a constant future date 3000-01-01
+document_number     - almost all unique values, removed
+request_num         - mostly unique values, removed
+requisition_number  - removed, document number is not useful
+demand_date         - 571 NA's, replaced NA's with a constant future date (1900-01-01), changed to date-time format
+issue_date          - no NA's, changed to date-time format
+cwt_hours           - 571 NA's, used median of positive numbers to replace NA's in data, treated outliers
+issue_apl           - no NA's, changed datatype to string
+issue_eic           - 2 NA's, replaced NA's with mode
+niin                - id number, not useful
+niin_nomenclature   - keep this instead of niin, easier to understand, changed datatype to string
+unit_of_issue       - no NA's, changed datatype to string
+supply_pri          - 27 NA's, replaced NA's with mode
+source_code         - 2330 NA's, changed datatype to string, replaced NA's with 'Unknown'
+quantity            - No NA's
+unit_price          - No NA's
+total_priceL        - No NA's
+job_seq             - No NA's
+
+
+***********************************************************************************************************************************************
+***********************************************************************************************************************************************
+
+----Jobs Data Column Definitions----
+
+uic: unit identification code. Identifies the ship.
+
+job_seq: A sequential number assigned to each maintenance action within a Work Center. 
+    47350 unique values. 
+    his column is also present in supply data frame, can use for joins. 
+
+action_taken_code: The action the sailor has taken due to the failure or malfunction of the equipment at the Organizational Level 
+    (shipboard) or the Intermediate Level or at both levels. 
+
+1: maintenance action completed part drawn supply      13750 (these numbers are how many are contained in just 1, there were more like 1B, etc) Chose to only consider the first char of the code up to len 2 because the information is very similar for 1 vs 1b, etc
+X: unknown  (I created this value for NA's)           11830
+3: maintenance action completed part required           9615
+4: cancelled deferral removed csmp                      8474
+2: maintenance action completed part supply             2011
+0: none describe remark                                  541
+
+
+
+
+
+
+alt_closing and alt_opening: > 99% NA 
+
+apl: Identifies a system or equipment and the repair spares, Maintenance Assistance Modules, and special tools required. 
+    Consists of several categories such as Hull, Mechanical, and Electrical, Ordanance, Gunfire Control Systems *Not available in appendix
+    Allowance Parts List
+        a SUP/MAINT NR/DOC for equipments on ships; created by NAVICP. Contains data on ship's 
+        equipment; i.e., characteristics, parts (NIIN) needed & QTY thereof. APL is part of COSAL DOC.
+    Allowance Parts List - a SUP/MAINT NR/DOC for equipments on ships; created by NAVICP. 
+        Contains data on ship's equipment; i.e., characteristics, parts (NIIN) needed & QTY thereof. APL is part of COSAL DOC.
+    Not important to get full interpretation of the variable - Meeting w Dan
+        Treat 0, not listed, NA the same way. Can replace with 'Unknown'. (Currently unedited column)
+
+        
+cause_code: Identifies the cause for equipment failure or malfunction. 
+    0: No malfunction
+    1: Abnormal environment 
+    2: Manufacturer/ Installation Defects
+    3: Lack of Knowledge or Skill
+    4: Communication Problems
+    5: Inadequate instruction/ procedure
+    6: Inadequate design
+    7: Normal wear and tear
+    8: Corrosion
+    - The most seen cause codes are 0 and 7.
+
+cdm_rin: Configuration of the ship. Describes changes from the design of the ship to the final build. It is an identifier for that subsystem or system at that point in time. 
+    cdm_rin is a subset of another configuration column. 
+    Describes specifications for a ship 
+
+csmp_narrative_summary: Condensed description of the problem, limited to 30 characters 
+
+date_closing: date the maintenance was closed
+
+date_maintenance_action: date the maintenance is created
+
+deferral_reason_code: Identifies the reason for deferring the maintenance action
+    0: OTHER/ NA
+    1: Due to ship's force work backlog/ operational priority
+    2: Lack of material
+    3: No formal training for this equipment 
+    4: Formal training inadequate for this equipment
+    5: Inadequate school practical training
+    6: Lack of facilities/ capabilities
+    7: Not authorized for ship's force accomplishment
+    8: For ship's force overhaul or availability work list
+    9: Lack of technical documentation
+    - 1 and 2 are the most frequent with > 10000 each
+
+due_date: The latest possible day for completion of the maintenance action received by ships force. Reported or deferral only. 
+    ~ 43% are non empty 
+
+eic: 7 character code. *Not available in appendix
+    1: system
+    2: subsystem
+    3 and 4: equipment category in system 
+    - Last 3 digits: Greater detail
+
+equipment_nomenclature: Description of the equipment as reported by the person involved in the Maintenance Action. 
+    - >20000 are 'Vent nonmch Prp'
+
+eswbs_closing: Expanded Ship Work Breakdown Structure (ESWBS) reported by the ships force during the closing of the Deferral or Non Deferral. 
+    - Null for IMA *Need more
+
+eswbs_opening: Expanded Ship Work Breakdown Structure (ESWBS) reported by the ships force during the opening of the Deferral or Non Deferral. 
+    - Null for IMA 
+    Used as a common denominator for the diverse areas of endeavors associated w shipbuilding
+    A single language to span the entire ship life cycle
+    5 digit numeric code 
+    First 3 identify the section of the MIL-STD-1399
+    Last 2 distinguish sections relatedd to the same primary ESWBS element in case of subject duplication
+    System Based Partition Hierarchy
+    Definition of complete and accurate work breakdown structures is required in every stage of a ship project through its acquisition, deployment, and decommissioning and disposal phases. 
+    So ESWBS is a five digit functional classification system, with the fourth and fifth single digit classification levels used to incorporate the functions that support maintenance and repair needs. For example, for weight reporting purposes, only the first three digits of this system apply. 
+    39408/47350 end with "11"
+
+identification_number_closing: The ID/EQUIPMENT SERIAL NUMBER of the equipment reported at the closing of the Deferral MA. 
+    - Non-Deferral/IMA MAs will be "NULL". 
+
+insurv_number: 1.1% non NA 
+
+insurv_suffix: All non NA values = 1
+
+integrated_priority: Sequential number to establish maintenance action priority relative to the other Deferral Maintenance 
+    Actions within a particular availability, 
+    - 14% non NA.  (can also get rid of this column)
+
+iuc_screening_code: The Intermediate Unit Commander reccomendation as to what "LEVEL" should work the deferred MA, 
+    - > 19000 were reccomended 4.
+    The IUC is the officer in the chain of command between the ship and the TYCOM Rep.
+
+    1: DEPOT (SHIPYARD OR SHIP REPAIR FACILITY) ACCOMPLISH
+    1A: DEPOT ASSISTED BY SHIP'S FORCE
+    1S: SHIP TO SHOP (DEPOT)
+    1M: ACCOMPLISH WITH MODIFICATION (DEPOT)
+    2: IMA (TENDER/REPAIR SHIP, ETC.) ACCOMPLISH
+    2A: IMA ASSISTED BY SHIP'S FORCE
+    2S: SHIP TO SHOP (IMA)
+    2M: ACCOMPLISH WITH MODIFICATION (IMA)
+    3: TYCOM SUPPORT UNIT (TSU) (FLOATING DRY DOCK, ETC.) ACCOMPLISH OR TECHNICAL ASSISTANCE FROM NSCSES/NAVSEACEN/CONTRACTOR REPRESENTATIVE
+    3A: TSU ASSISTED BY SHIP'S FORCE
+    3S: SHIP TO SHOP (TSU)
+    3M: ACCOMPLISH WITH MODIFICATION (TSU)
+    4: SHIP'S FORCE ACCOMPLISH
+    8: DISAPPROVED
+    9: REMOVE FROM CSMP. PASS TO HISTORY (TO BE ASSIGNED BY TYCOM ONLY)
+
+    *Created category 0 for NAs
+
+****************************************************************************************************************
+
+jcn - A number used to identify each repair alteration action reported in the 3-M (Maintenance and Material Management) 
+    System. It is structured to show the activity unit identification code, originating work-center, and the job sequence number.
+    Note: First 5 digits - UIC. Next 4 digits - Cognizant Work Center.
+    Last 4 digits - Job Sequence Number..
+    
+location - char, length 20, "Various" 
+    location of the equipment being maintained, includes compartment, deck, frame, and side.
+    - importance - we can geolocate where jobs are occuring in the ship, which can help us determine problem areas where hvac might have an impact on equipment
+    - failure
+    A     Supply and stowage
+    AA   Cargo holds 
+    C     Control centers (such as the combat information center) 
+    E     Engineering (machinery) 
+    F     Fuel stowage (for use by the ship; that is, not as cargo) 
+    FF   Fuel stowage compartments (when cargo) 
+    J     Jet (aviation) fuel for use by embarked aircraft 
+    JJ    Jet (aviation) fuel as cargo 
+    K    Chemicals and dangerous materials
+    L     Living spaces
+    M    Ammunition spaces
+    Q    Miscellaneous spaces
+    T     Vertical access or escape trunks 
+    V     Void (spaces that are normally empty)
+    W    Water Stowage
+
+    1: level (up/down relative to main deck)
+    2: front of the ship to the back of the ship
+    3: distance from center line parallel to the ship (even: left, odd: right)
+    4: purpose (Q,L,M) Machine Area, Living Area, Engineering Rooms, etc.
+    (possibly pinpoint specific areas that cause the most issues)
+mhc - man hours closing
+    total man-hours expended by all ship's force personnel involved in the defferal closing or non defferal MA
+
+mho - man hours opening
+    total man-hours expended by all sf personnel involved in the deferral action up to the time of defferal
+
+mhr - man hours remaining
+    the estimated number of ship's force man-hours remianing to complete the deferred maintainance action
+
+priority_code - the precendence of the deferred maintenance action
+    1 - MANDATORY
+    2 - ESSENTIAL
+    3 - HIGHLY DESIRABLE
+    4 - DESIRABLE
+
+safety_code - an x or applicable safety code, indicates that a hazardous condition has or will cause
+    serious injury to personnel, or damage to material
+    0 - MAY BE TYCOM ASSIGNED
+    1 - SERIOUS SAFETY DISCREPANCY -CORRECT AS SOON AS POSSIBLE
+    2 - SERIOUS SAFETY DISCREPANCY - SUSPENSION OF EQUIPMENT/SYSTEM/SPACE IS REQUIRED
+    3 - SERIOUS SAFETY DISCREPANCY - WAIVER OF EQUIPMENT/SYSTEM/SPACE IS GRANTED PENDING CORRECTION OF THE ITEM
+    4 - SAFETY ITEM -MINOR
+    5 - COMBUSTIBLE MATERIALS
+    6 - MAY BE TYCOM ASSIGNED
+    7 - MAY BE TYCOM ASSIGNED
+    8 - MAY BE TYCOM ASSIGNED
+    9 - MAY BE TYCOM ASSIGNED
+    X - SAFETY HAZARD
+
+status_code - condition of the equipment when the need for maintenance was when_discovered
+    D,N,I 
+    many engineering users consider MAs with STATUS CODE 2/3 to be 'failures' and use for R M and A computations/analysis
+    1 - OPERATIONAL
+    2 - NON-OPERATIONAL
+    3 - REDUCED CAPABILITY
+    0 - NOT APPLICABLE (TO BE USED WHEN REPORTING PRINTING SERVICES, ETC.)
+
+tycom_screening_code - TYCOM assigned; indicates Maint "LEVEL" to work Deferred MA. 
+    TYCOM or his REP reviews SF TYPE AVAILABILITY Code and/or IUC screening code & makes final decision on "LEVEL" requested. 
+    TYCOM's decision has precedence over IUC.
+    1 - DEPOT (SHIPYARD OR SHIP REPAIR FACILITY) ACCOMPLISH
+    1A - DEPOT ASSISTED BY SHIP'S FORCE
+    1S - SHIP TO SHOP (DEPOT)
+    1M - ACCOMPLISH WITH MODIFICATION (DEPOT)
+    2 - IMA (TENDER/REPAIR SHIP, ETC.) ACCOMPLISH
+    2A - IMA ASSISTED BY SHIP'S FORCE
+    2S - SHIP TO SHOP (IMA)
+    2M - ACCOMPLISH WITH MODIFICATION (IMA)
+    3 - TYCOM SUPPORT UNIT (TSU) (FLOATING DRY DOCK, ETC.) ACCOMPLISH OR TECHNICAL ASSISTANCE FROM NSCSES/NAVSEACEN/CONTRACTOR REPRESENTATIVE
+    3A - TSU ASSISTED BY SHIP'S FORCE
+    3S - SHIP TO SHOP (TSU)
+    3M - ACCOMPLISH WITH MODIFICATION (TSU)
+    4 - SHIP'S FORCE ACCOMPLISH
+    8 - DISAPPROVED
+    9 - REMOVE FROM CSMP. PASS TO HISTORY (TO BE ASSIGNED BY TYCOM ONLY)
+
+type_availability_code - The SF personnel recommended availability for completing 
+    the deferred maintenance action; "1" represents Depot, "2" represents IMA, "3" 
+    represents TSU/Technical Assistance and "4" represents Ships Force. 
+    0 - NOT APPLICABLE
+    1 - DEPOT (SHIPYARD OR SHIP REPAIR FACILITY)
+    2 - IMA (TENDER/REPAIR SHIP, ETC.)
+    3 - TYCOM SUPPORT UNIT (TSU) (FLOATING DRY DOCK, ETC.) OR TECHNICAL ASSISTANCE FROM NSCSES/NAVSEACEN/CONTRACTOR REPRESENTATIVE
+    4 - SHIP'S FORCE 
+
+type_of_maintenance_action - (TYPE MA) 1 digit NSLC created code. TYPE MA is one or more "family" of allowed 3-M records for one JCN. 
+    Codes are D=Deferral (& family); N=Non-Deferral (& family); I=IMA (& family); R=Demand Only; P=Issue Only; T=2K BLK 35 Only.
+    Maintenance action
+        D = deferral
+        I = IMA
+        N = NON-deferral
+        P = only part issue records
+        R = only part demand records
+        T = only narrative records
+        E = planning and estimating job
+
+when_discovered_code - Describes when the need for maintenance was determined. Applicable to D, N, I TYPE MAs.
+    0 NA 
+    1 lighting off or starting
+    2 normal operation
+    3 during operability tests
+    4 during inspection
+    5 shifting operational modes
+    6 during pms
+    7 securing
+    8 during aec (assessment of equipment condition) program
+    9 no failure, pms accomplishment only
+
+work_center - The subdivision of the SF crew (vice IMA) assigned to accomplish maintenance requirements for specified installed equipment.
+    Mandatory for installation or addition.
+    Optional for removal, modification, deletion, or change.
+
+total_ima_man_hours - Sum of IMA AWR Records reported by LWC/AWC's for the IMA/SIMA's supporting the MA. Applicable to D, N, I MAs.
+
+total_ship_force_man_hours - Sum of MAN-HOURS-OPENING plus MAN-HOURS-CLOSING, to the nearest whole hour, expended by ship's force personnel or 
+    other installing personnel in completing 
+    and documenting the Deferral/Non-Deferral maintenance action.
+    Always = mho + mhc
+
+total_replacement_cost - QTY(s) issued for an item x UNIT PRICE only (does not use REPAIR PRICE) for the item, summed for all items for 
+    the MA (D, N, I, P) to get total issue COST. ORG R COST + IMA R COST.
+
+total_repair_replacement_cost - QTY(s) issued for an item x REPAIR NET PRICE (Non-AV DLR/AV DLR) or x UNIT PRICE (Non-repairable/consumable) 
+    for the items, summed for all items for the MA. If REPAIR PRICE not available UNIT used. ORG R/R COST + IMA R/R COST.
+    Always < total_replacement_cost
+    Only 490 instances where total_repair_replacement_cost != total_replacement_cost
+def_narrative - important for nlp
+
+nondef_narrative - important for nlp
+
+closing_narrative - important for nlp
+
+ima_narrative - nlp
+
+total_material_cost - The total amount of cost for all the material used by the Repair Activity to complete the job.
+
+****************************************************************************************************************
+
+configurationItemId (DON'T NEED)
+
+opening_ship_system: system code (e.g. R0336951211)
+uic + eswbs R03369 = uic and 51211 = eswbs_opening
+
+closing_ship_system: system code (e.g. R0336951211)
+
+job_status: open or closed or overdue
+
+days_open: number of days job was/is active
+
+action_taken: describes the action taken to complete the maintenance (words)
+
+
+action_taken_code: 
+Featured based on action_taken
+#######Feature Engineer Action Taken Code based on Action_taken
+def action_taken_func(action_taken):
+    if action_taken == 'maintenance action completed part drawn supply': #13750
+        return '1'
+    elif action_taken == 'unknown': #11830
+        return 'X'
+    elif action_taken == 'maintenance action completed part required': #9615
+        return '3'
+    elif action_taken == 'cancelled deferral removed csmp': #8474
+        return '4'
+    elif action_taken == 'maintenance action completed part supply': #2011
+        return '2'
+    elif action_taken == 'completed part supply necessary': #577
+        return '2'
+    elif action_taken == 'none describe remark': #541
+        return '0'
+    else: #~ 500 not in these categores, unsure where to put them
+        return 'X'
+
+intermediate_unit_commander_screening: The Intermediate Unit Commander (IUC) or the designated representative's recommendation as to what
+    "LEVEL" should work the Deferred MA. The IUC is the officer in the chain of command between the
+    ship and the TYCOM Rep (9 different categories)
+    ['Unknown',
+    'Ships force accomplish',
+    'DEPOT (shipyard or ship repair facility) accomplish',
+    'TSU or NAVUNDERSEAWARCENDET/FTSCPAC/FTSCLANT',
+    'IMA accomplish',
+    "DEPOT assisted by ship's force",
+    "IMA; assisted by ship's force",
+    'Not authorized; general',
+    "TSU; assisted by ship's force",
+    'Deferred']
+
+priority: priority of job (4 categories)
+['Unknown', 'Desirable', 'Highly desirable', 'Mandatory', 'Essential']
+
+component_status: operational status of component (4 categories)
+    ['Operational',
+    'Non-operational',
+    'Not applicable (when reporting printing services, etc)',
+    'Reduced capability',
+    'Unknown']
+
+type_of_availability_needed: who is needed to compelete job (5 categories)
+    ['Unknown',
+    'TYCOM Support Unit (TSU) or tech assist from NSCSES/NAVSEACEN/contractor rep',
+    "Ship's force",
+    'Intermediate Maintenance Activity (IMA)',
+    'Depot (shipyard or ship repair facility)',
+    'Not applicable']
+
+tycom_screening: TYCOM assigned; indicates Maintenance “LEVEL” to work Deferral Maintenance Action. TYCOM
+    or his REP reviews SF TYPE AVAILABILITY Code and/or IUC screening code and makes final
+    decision on “LEVEL” requested. TYCOM’s decision has precedence over IUC (14 categories)
+    ['Unknown',
+    'Not authorized',
+    'Ships force accomplish',
+    'DEPOT (shipyard or ship repair facility) accomplish',
+    'TSU or NAVUNDERSEAWARCENDET/FTSCPAC/FTSCLANT',
+    'IMA (tender/repair ship, etc) accomplish',
+    'TSU; ship to shop',
+    'Not authorized; general',
+    "DEPOT assisted by ship's force",
+    "TSU; assisted by ship's force",
+    'IMA; ship to shop',
+    "IMA; assisted by ship's force",
+    'Remove from CSMP.  Pass to history.',
+    'DEPOT; ship to shop',
+    'Deferred']
+
+when_discovered: Describes when the need for maintenance was determined (9 categories)
+    0 NOT APPLICABLE (TO BE USED WHEN REPORTING PRINTING SERVICES,
+    ETC.)
+    1 LIGHTING OFF OR STARTING
+    2 NORMAL OPERATION
+    3 DURING OPERABILITY TESTS
+    4 DURING INSPECTION
+    5 SHIFTING OPERATIONAL MODES
+    6 DURING PMS
+    7 SECURING
+    8 DURING AEC (ASSESSMENT OF EQUIPMENT CONDITION) PROGRAM
+    9 NO FAILURE, PMS ACCOMPLISHMENT ONLY      
+
+cause: reason for job (words)
+
+deferral_reason: identifies the reason for deferring the maintenance action (10 categories)
+    ['Unknown',
+    "Due to ship's force work backlog/operational priority",
+    'Other - or not applicable',
+    'Lack of material',
+    'No formal training on this equipment',
+    'Lack of facilities/capabilities',
+    'Lack of technical documentation',
+    "For ship's force overhaul or availability work list",
+    "Not authorized for ship's force accomplishment",
+    'Inadequate school practical training',
+    'Formal training inadequate for this equipment']
+
+feasible_with_ship_inventory: completion of job with ship inventory
+
+feasible_with_additional_dla_inventory: completion of job with Defense Logistics Agency inventory
+
+ship_readiness_effect (DO NOT NEED, most of the values are 0)
+
+assigned (DROP, only 1 unique value)
+
+casrep_filed: do not need (only 1 unique value)
+ 
+ship: name of ship
+
+
+*******************************************************************************************************************************************
+*******************************************************************************************************************************************
+
+----Supply Data Column Definitions----
+
+jcn: A number used to identify each repair alteration action reported in the 3-M (Maintenance and Material
+    Management) System. It is structured to show the activity unit identification code, originating workcenter, and the job sequence number. 
+    Note: First 5 digits - UIC. Next 4 digits - Cognizant Work Center.
+    Last 4 digits - Job Sequence Number.
+
+uic: Unit Identification Code - 5 digit accounting NR for a ship, shore activity or contractor assigned
+    by military services for accounting purposes. UIC & ACTIVITY NAMES are listed in NAVCOMPT
+    Manual Vol. 2 Chap 5. 
+    identifies the activity that originated the availability
+    11 distinct uic
+
+work_center: WORK CENTER of the ship/shore activity being 'tended' by the REPAIR UIC. Although uncommon a 3 POS WORK CENTER can be 'tended' by a REPAIR UIC. 
+    A subcomponent of organization. It may be a department, division, work center or some other component type code.
+    The subdivision of the SF crew. 
+    Each work_center is present on several other ships. 
+    Some work centers (ex: EA03) exist on all 11 ships
+    196 unique values
+
+jsn: A sequential number assigned to each maintenance action within a Work Center. job sequence number
+    The sequential number assigned to a job representing its relative creation point with other jobs
+    manifested within a given work center.
+    A four-character number assigned by the work center to the maintenance action, or assigned by the outside activity performing the work. 
+    This assigned sequentially from the Ship’s Force Work List/ Job Sequence Number Log.
+    (last 4 of the jcn)
+    2094 unique values
+    Grouping by uic, jcn and jsn have the same amount of unique values for each ship
+
+date_maintenance_action: Date MA is NSLC created. It controls FROM/TO windows for extracting MAs.For        
+    most part, Date MA is not O/P. Date MA creation is dependent on TYPE MA: D/I use Date open; N, Date close; R/P Demand/Issue date; T, MRMS Date.
+    Ranges from to 11/1/2017 to 5/31/2022 (same range as jobs_data)
+    pd.to_datetime(supply_data['date_maintenance_action']).sort_values().min()
+
+date_closing: Date Deferral (D), Non-deferral (N) or IMA (I) MA was closed. Demand only, Part only, & Narrative
+    only MAs (MA TYPES R, P, T respectively) will be "NULL". NULL Dates are O/P as 0's. Open/Close
+    dates for "N" MA's are =, unless one is NULL.
+    Ranges from 11/1/2017 to 12/14/2022 (11/12017 to 6/16/2022 for jobs_data)
+    948 NA values   
+Note on Dates: 
+For the jobs dataset, the last recorded date_closing is 
+
+
+document_number: 31950 unique values (NOT IMPORTANT)
+
+request_num: This will hold the requisition number used on the 1348 or message to order the part from some stock
+    point off of the ship. (31983 unique values) (NOT IMPORTANT)
+
+requisition_number: Document number used to order part. The requisition number contains a six-character activity UIC (NOT USEFUL)
+
+demand_date: Date maintenance personnel (SF/IMA) requested parts/material from Supply to perform maintenance
+    vice stocking storerooms.
+    Date the parts were requested
+    Ranging from 11/1/2017 to 12/4/2022
+
+Note on Dates: 
+#47350 in jobs (11233 do not have a closing value), 35194 in supply (849 do not have a closing value)
+47350 (rows in jobs) - 11233 (closing is NA in jobs) - 35194 (rows in supply) - supply_data['date_closing'].isnull().sum() = 74
+Looks like supply is almost all closed maintenance, while jobs contains some unfinished maintenance records
+
+issue_date: Date Supply Dept personnel (SF/IMA) issued parts/material to maintenance personnel to fix the
+    equipment (APL, EIC, ESWBS) reported on 2K and/or AWR. 
+    ISSUE minus DEMAND DATE for "a matching item" is DAYS AWAITING PARTS. (COULD BE VERY USEFUL)
+    Date the maintenance personnel were supplied the parts from the Supply Dept Personnel 
+    11/3/7017 - 12/9/2022
+    Note: possible outliers/ incorrect entry: 4 observations have issue dates of 10/30/1992. Also, another 7 entries are in 2017 before 11/1. 
+    issue date should be at least the day of the demand date, if not later. 
+    The first demand date is 11/1/2017
+
+cwt_hours: Hours elapsed between the order or demand date and the received or issue date. 
+    Feature engineered from issue_date - demand_date. 
+    Contains some negative values, represents issue_date coming before demand_date. 
+    22893 are positive. Negative values occur when demand_date is after issue_date
+
+issue_apl: Allowance Parts List - a SUP/MAINT NR/DOC for equipments on ships; created by NAVICP.
+    Contains data on ship's equipment; i.e., characteristics, parts (NIIN) needed & QTY thereof
+
+issue_eic: EIC-7 character code, 1st position identifies system; 2nd identifies subsystem; & 3rd & 4th identify
+    equip category in system. Remaining 3 digits provide greater detail
+
+niin: National Item Identification Number-9 digit NR, first 2 digits are the National Codification Bureau (NCB) code. The 9 digit NR uniquely identifies each National Stock Number (NSN) item in the Federal Supply System.
+    Each niin corresponds to 1 niin_nomenclature value. For example, 16945741 corresponds to BELT,V both times it is seen in the dataset. 
+    However, each niin_nomenclature value does not correspond to the same niin value. For example, BELT,V is seen 1015 times, with 21 distinct values for niin when subsetting the dataset to 
+    only include rows with niin_nomenclature = 'BELT,V'
+    Summary: Multiple niin numbers match to a shared niin_nomenclature description
+
+niin_nomenclature: 873 unique values
+
+quantity: quantity of supplies. 
+
+unit of issue: A dual alphabetic abbreviation for the unit of issue of the item issued by Supply to maintenance personnel. Compliments Issue QUANTITY; i.e.,EA, DZ, CK. 91% are EA. 
+
+supply_pri: Vast majority = 4. Categorical variable with possible values 1,2,3,4
+
+source_code: A 1-digit A/N code per NAVSUP PUB 485. Identifies basis of supply item availability when item requested; i.e., IS, NIS, LISTED but NC or NC. Paired with FUND CODE 2nd POS for computing "ALLOWANCE EFFECTIVENESS". 
+        61% are A. 8 unique values
+
+unit_price: price of each supply unit
+
+total_price: quantity * unit_price
+
+job_seq: A sequential number assigned to each Maintenance Action. 
