@@ -77,31 +77,41 @@ First 5 digits - UIC. Next 4 digits - Cognizant Work Center. Last 4 digits - Job
 
 location: 
     1: level (up/down relative to main deck)
-    2: front of the ship to the back of the ship
+        #1,2,3,4.... refers to levels below the main deck (so, level 7 is lower on the ship than level 1)
+        #01,02,03.... refers to levels above the main deck (so, level 05 is higher on the ship than level 01)
+
+        #03 refers to the flight deck, which accounts for the highest proprtion of HVAC records
+        #1 refers to the Main Deck
+
+    2: front of the ship (bow) to the back of the ship (stern). [Frame Number] 
+        #Frame number increases as you go towards the back of the ship. Spaced approximately 4 feet apart, which is why there are so many frame number values. 
+
+
     3: distance from center line parallel to the ship (even: left, odd: right)
+        0 is the centerline 
+        Odd numbers: Compartments located to the starboard (right side facing forward)
+        Even numbers: Compartments located to the port (left side facing forward)
+
+*Note to self: The number of levels can vary from ship to ship. So, analysis on the 'top level' of the ship will need to be more cautious than simply looking at entires with the largest level number in the dataset. 
+For later, look into the unique values of Level, Frame Number, Distance Fro  Center, 
+
     4: purpose (Q,L,M) Machine Area, Living Area, Engineering Rooms, etc.
+        A     Supply and stowage
+        AA   Cargo holds 
+        C     Control centers (such as the combat information center) 
+        E     Engineering (machinery) 
+        F     Fuel stowage (for use by the ship; that is, not as cargo) 
+        FF   Fuel stowage compartments (when cargo) 
+        J     Jet (aviation) fuel for use by embarked aircraft 
+        JJ    Jet (aviation) fuel as cargo 
+        K    Chemicals and dangerous materials
+        L     Living spaces
+        M    Ammunition spaces
+        Q    Miscellaneous spaces
+        T     Vertical access or escape trunks 
+        V     Void (spaces that are normally empty)
+        W    Water Stowage
 
-
-    A     Supply and stowage
-    AA   Cargo holds 
-    C     Control centers (such as the combat information center) 
-    E     Engineering (machinery) 
-    F     Fuel stowage (for use by the ship; that is, not as cargo) 
-    FF   Fuel stowage compartments (when cargo) 
-    J     Jet (aviation) fuel for use by embarked aircraft 
-    JJ    Jet (aviation) fuel as cargo 
-    K    Chemicals and dangerous materials
-    L     Living spaces
-    M    Ammunition spaces
-    Q    Miscellaneous spaces
-    T     Vertical access or escape trunks 
-    V     Void (spaces that are normally empty)
-    W    Water Stowage
-|||location cont.
-Location Frequencies- 
-Front of the ship to the back of the ship: 
-No spot has more than 5% of observed records.
-Wide distribution of maintenance reports. 
 
 mhc - man hours closing
     total man-hours expended by all ship's force personnel involved in the defferal closing or non defferal MA
