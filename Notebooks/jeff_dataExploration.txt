@@ -1,0 +1,129 @@
+job_seq: 
+Uniquely identifies a job record (47350 unique values)
+
+action_taken_code: Action taken by sailor due to failure of malfunction of equipment
+~95% of observed entries are 1,3,4,2
+About 11k NAs
+
+apl: Allowance Parts List 
+2763 unique values 
+~31000 have length 9, 8k length 11, 5k length 8, 3k length 10
+
+cause_code: Most are code 7 (56%) or 0 (34%)
+7: Normal wear and tear
+0: No malfunction
+Some others showing up ~1-2% of the time:
+8: Corrosion
+6: Inadequate design
+1: Abnormal enviornment
+
+cdm_rin:
+All but 16 records have length 5
+Configuration of the ship. Describes changes from the design of the ship to the final build. It is an identifier for that subsystem or system at that point in time.
+
+csmp_narrative_summary: Condensed description of the problem, limited to 30 characters
+
+date_maintenace_action: Ranging from 11/1/2017 to 5/31/2022
+
+date_closing: Ranging from 11/1/2017 to 6/16/2022
+~11k NAs. Believed to be unfinished jobs at the time the maintenance data stopped being updated
+Note to self - One possible idea could be to fit 2 models. One with a time sequential train/test split and another split randomly to see if this influences performance. 
+
+deferral_reason_code: 
+Identifies the reason for deferring the maintenance action [Percentage of recorded entries for this column]
+    0: OTHER/ NA [14%]
+    1: Due to ship's force work backlog/ operational priority [24%]
+    2: Lack of material [35%]
+    3: No formal training for this equipment 
+    4: Formal training inadequate for this equipment
+    5: Inadequate school practical training
+    6: Lack of facilities/ capabilities [13%]
+    7: Not authorized for ship's force accomplishment
+    8: For ship's force overhaul or availability work list [10%]
+    9: Lack of technical documentation
+
+due_date:
+The latest possible day for completion of the maintenance action received by ships force. Reported or deferral only. 
+~ 43% are non empty 
+
+eic: Equipment Identification Code
+7 character code. *Not available in appendix
+    1: system
+    2: subsystem
+    3 and 4: equipment category in system 
+    - Last 3 digits: Greater detail
+
+equipment_nomenclature: Description of the equipment as reported by the person involved in the Maintenance Action. 
+~ Half are 'Vent nonmch Prp'
+
+eswbs_opening: Expanded Ship Work Breakdown Structure (ESWBS) reported by the ships force during the opening of the Deferral or Non Deferral. 
+ *eswbs_opening and eswbs_closing are almost always the same. eswbs_closing is not recorded for Unfinished jobs
+| 21 distinct values for eswbs_opening
+| First 3 identify the section of the MIL-STD-1399
+Last 2 distinguish sections relatedd to the same primary ESWBS element in case of subject duplication; however, around 85% end with "11".
+512: 60%
+514: 20%
+433: 7%
+513: 7%
+436: 3%
+511: 2%
+
+identification_number_closing: The ID/EQUIPMENT SERIAL NUMBER of the equipment reported at the closing of the Deferral MA. 
+    - Non-Deferral/IMA MAs will be "NULL".
+Does not uniquely identify equipment. Filtered to include with value '12AF. Gave results on different ships and in different locations. 
+
+jcn: uic (ship identifier) + work center + job sequence number 
+First 5 digits - UIC. Next 4 digits - Cognizant Work Center. Last 4 digits - Job Sequence Number
+
+location: 
+    1: level (up/down relative to main deck)
+    2: front of the ship to the back of the ship
+    3: distance from center line parallel to the ship (even: left, odd: right)
+    4: purpose (Q,L,M) Machine Area, Living Area, Engineering Rooms, etc.
+
+
+    A     Supply and stowage
+    AA   Cargo holds 
+    C     Control centers (such as the combat information center) 
+    E     Engineering (machinery) 
+    F     Fuel stowage (for use by the ship; that is, not as cargo) 
+    FF   Fuel stowage compartments (when cargo) 
+    J     Jet (aviation) fuel for use by embarked aircraft 
+    JJ    Jet (aviation) fuel as cargo 
+    K    Chemicals and dangerous materials
+    L     Living spaces
+    M    Ammunition spaces
+    Q    Miscellaneous spaces
+    T     Vertical access or escape trunks 
+    V     Void (spaces that are normally empty)
+    W    Water Stowage
+|||location cont.
+Location Frequencies- 
+Front of the ship to the back of the ship: 
+No spot has more than 5% of observed records.
+Wide distribution of maintenance reports. 
+
+mhc - man hours closing
+    total man-hours expended by all ship's force personnel involved in the defferal closing or non defferal MA
+
+mho - man hours opening
+    total man-hours expended by all sf personnel involved in the deferral action up to the time of defferal
+
+mhr - man hours remaining
+    the estimated number of ship's force man-hours remianing to complete the deferred maintainance action
+
+priority_code:
+the precendence of the deferred maintenance action
+    1 - MANDATORY
+    2 - ESSENTIAL
+    3 - HIGHLY DESIRABLE
+    4 - DESIRABLE (99% of Jobs are Desireable)
+
+safety_code: Filled values represent some form of perceived safety risk. 90/10% split with most having no safety risk
+
+status_code - condition of the equipment at time when_discovered 
+    many engineering users consider MAs with STATUS CODE 2/3 to be 'failures' and use for R M and A computations/analysis
+    1 - OPERATIONAL [47%]
+    2 - NON-OPERATIONAL [14%]
+    3 - REDUCED CAPABILITY [21%]
+    0 - NOT APPLICABLE (TO BE USED WHEN REPORTING PRINTING SERVICES, ETC.) [18%]
