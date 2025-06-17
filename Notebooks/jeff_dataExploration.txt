@@ -1,32 +1,33 @@
 job_seq: 
-Uniquely identifies a job record (47350 unique values)
+    Uniquely identifies a job record (47350 unique values)
 
 action_taken_code: Action taken by sailor due to failure of malfunction of equipment
-~95% of observed entries are 1,3,4,2
-About 11k NAs
+    ~95% of observed entries are 1,3,4,2
+    About 11k NAs
 
 apl: Allowance Parts List 
-2763 unique values 
-~31000 have length 9, 8k length 11, 5k length 8, 3k length 10
+    2763 unique values 
+    ~31000 have length 9, 8k length 11, 5k length 8, 3k length 10
 
 cause_code: Most are code 7 (56%) or 0 (34%)
-7: Normal wear and tear
-0: No malfunction
-Some others showing up ~1-2% of the time:
-8: Corrosion
-6: Inadequate design
-1: Abnormal enviornment
+    7: Normal wear and tear
+    0: No malfunction
+    Some others showing up ~1-2% of the time:
+    8: Corrosion
+    6: Inadequate design
+    1: Abnormal enviornment
 
 cdm_rin:
-All but 16 records have length 5
-Configuration of the ship. Describes changes from the design of the ship to the final build. It is an identifier for that subsystem or system at that point in time.
+    All but 16 records have length 5
+    Configuration of the ship. Describes changes from the design of the ship to the final build. It is an identifier for that subsystem or system at that point in time.
 
 csmp_narrative_summary: Condensed description of the problem, limited to 30 characters
 
 date_maintenace_action: Ranging from 11/1/2017 to 5/31/2022
 
 date_closing: Ranging from 11/1/2017 to 6/16/2022
-~11k NAs. Believed to be unfinished jobs at the time the maintenance data stopped being updated
+    ~11k NAs. Believed to be unfinished jobs at the time the maintenance data stopped being updated
+
 Note to self - One possible idea could be to fit 2 models. One with a time sequential train/test split and another split randomly to see if this influences performance. 
 
 deferral_reason_code: 
@@ -43,18 +44,18 @@ Identifies the reason for deferring the maintenance action [Percentage of record
     9: Lack of technical documentation
 
 due_date:
-The latest possible day for completion of the maintenance action received by ships force. Reported or deferral only. 
-~ 43% are non empty 
+    The latest possible day for completion of the maintenance action received by ships force. Reported or deferral only. 
+    ~ 43% are non empty 
 
 eic: Equipment Identification Code
-7 character code. *Not available in appendix
+    7 character code. *Not available in appendix
     1: system
     2: subsystem
     3 and 4: equipment category in system 
     - Last 3 digits: Greater detail
 
 equipment_nomenclature: Description of the equipment as reported by the person involved in the Maintenance Action. 
-~ Half are 'Vent nonmch Prp'
+    ~ Half are 'Vent nonmch Prp'
 
 eswbs_opening: Expanded Ship Work Breakdown Structure (ESWBS) reported by the ships force during the opening of the Deferral or Non Deferral. 
  *eswbs_opening and eswbs_closing are almost always the same. eswbs_closing is not recorded for Unfinished jobs
@@ -70,10 +71,10 @@ Last 2 distinguish sections relatedd to the same primary ESWBS element in case o
 
 identification_number_closing: The ID/EQUIPMENT SERIAL NUMBER of the equipment reported at the closing of the Deferral MA. 
     - Non-Deferral/IMA MAs will be "NULL".
-Does not uniquely identify equipment. Filtered to include with value '12AF. Gave results on different ships and in different locations. 
+    Does not uniquely identify equipment. Filtered to include with value '12AF. Gave results on different ships and in different locations. 
 
 jcn: uic (ship identifier) + work center + job sequence number 
-First 5 digits - UIC. Next 4 digits - Cognizant Work Center. Last 4 digits - Job Sequence Number
+    First 5 digits - UIC. Next 4 digits - Cognizant Work Center. Last 4 digits - Job Sequence Number
 
 location: 
     1: level (up/down relative to main deck)
@@ -83,17 +84,23 @@ location:
         #03 refers to the flight deck, which accounts for the highest proprtion of HVAC records
         #1 refers to the Main Deck
 
+
+
     2: front of the ship (bow) to the back of the ship (stern). [Frame Number] 
-        #Frame number increases as you go towards the back of the ship. Spaced approximately 4 feet apart, which is why there are so many frame number values. 
+        #Frame number increases as you go towards the back of the ship. 
+        #Spaced approximately 4 feet apart, which is why there are so many frame number values. 
 
 
-    3: distance from center line parallel to the ship (even: left, odd: right)
+    3: distance from center line parallel to the ship in terms of compartment (even: left, odd: right)
         0 is the centerline 
         Odd numbers: Compartments located to the starboard (right side facing forward)
         Even numbers: Compartments located to the port (left side facing forward)
+        Horizontal. Example: 2-100-5-Q would mean it is located in the 3rd compartment to the right of the centerline
+        How big are these compartments? Compartment sizes vary, but are generally said to be 10-20 feet wide. 
 
 *Note to self: The number of levels can vary from ship to ship. So, analysis on the 'top level' of the ship will need to be more cautious than simply looking at entires with the largest level number in the dataset. 
-For later, look into the unique values of Level, Frame Number, Distance Fro  Center, 
+For later, look into the unique values of Level, Frame Number, Distance From Center, 
+Also, look at whether all location codes have the same purpose. Specifically, is it possible for 2-100-3-A and 2-100-3-B to exist? 
 
     4: purpose (Q,L,M) Machine Area, Living Area, Engineering Rooms, etc.
         A     Supply and stowage
@@ -137,3 +144,49 @@ status_code - condition of the equipment at time when_discovered
     2 - NON-OPERATIONAL [14%]
     3 - REDUCED CAPABILITY [21%]
     0 - NOT APPLICABLE (TO BE USED WHEN REPORTING PRINTING SERVICES, ETC.) [18%]
+
+tycom_screening_code: Type commander screening code, decision has precedence over IUC (intermiediate unit commander)
+    TYCOM assigned; indicates Maint "LEVEL" to work Deferred MA.  
+    9k NAs, could be due to them not being assigned to tycom.
+    TYCOM or his REP reviews SF TYPE AVAILABILITY Code and/or IUC screening code & makes final decision on "LEVEL" requested. 
+
+type_availability_code: Ship force reccomendation
+    0 - NOT APPLICABLE
+    1 - DEPOT (SHIPYARD OR SHIP REPAIR FACILITY)
+    2 - IMA (TENDER/REPAIR SHIP, ETC.)
+    3 - TYCOM SUPPORT UNIT (TSU) (FLOATING DRY DOCK, ETC.) OR TECHNICAL ASSISTANCE FROM NSCSES/NAVSEACEN/CONTRACTOR REPRESENTATIVE
+    4 - SHIP'S FORCE 
+    #Most often, ship's force
+
+type_of_maintenance_action: Deferral/ Nondeferral. Almost all records are Deferral.
+    Other code options are-  P = only part issue records, R = only part demand records, T = only narrative records, E = planning and estimating job but are not present in this dataset. 
+
+when_discovered_code: Describes when the need for maintenance was determined 
+    0 NA [9%]
+    1 lighting off or starting
+    2 normal operation [36%]
+    3 during operability tests
+    4 during inspection [32%]
+    5 shifting operational modes
+    6 during pms [14%]
+    7 securing
+    8 during aec (assessment of equipment condition) program
+    9 no failure, pms accomplishment only [6%]
+
+work_center: The subdivision of the SF crew (vice IMA) assigned to accomplish maintenance requirements for specified installed equipment
+
+#interpretation of work center codes. 
+
+    
+
+#Establish order of command for tycom, ships force, iuc, etc. Understand csmp meaning, deferral/non deferral, other aspects of how the jobs are handled. 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Common abbreviations:
+
+tycom: Type commander
+tsu: Tycom support unit
+sf: Ship's force
+iuc: intermediate unit commander
+ima: intermediate maintainance activity
+csmp: Current ship's maintenance project
+pms: Planned Maintenance System
