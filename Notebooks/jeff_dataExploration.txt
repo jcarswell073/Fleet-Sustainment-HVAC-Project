@@ -173,9 +173,38 @@ when_discovered_code: Describes when the need for maintenance was determined
     8 during aec (assessment of equipment condition) program
     9 no failure, pms accomplishment only [6%]
 
-work_center: The subdivision of the SF crew (vice IMA) assigned to accomplish maintenance requirements for specified installed equipment
+work_center: The subdivision of the SF crew (vice IMA) assigned to accomplish maintenance requirements for specified installed equipment 
+    All are 4 characters long
+    98.5% follow format Letter letter number number, the remaining ~1.5% are 4 letters (often GWTN)
+    Most Common Work Centers: 
+    EA    0.23  Engineering Administration
+    CS    0.13  Combat Systems 
+    EE    0.13  Electrical Shop
+    SS    0.07  Supply Department Administration
+    https://www.navsea.navy.mil/Portals/103/Documents/SUBMEPP/TYCOM/Standard_WC_Codes-Air_Force_Ships_27Nov20.pdf for Work Center codes
 
-#interpretation of work center codes. 
+    Most Common Entire Groupings
+    EA03: Air Conditioning & Refrigeration [19%]
+    EE02: Rewind [6%]
+    PM01: 3-M [5%]
+
+total_ship_force_man_hours: mho + mhc
+
+total_replacement_cost - QTY(s) issued for an item x UNIT PRICE only (does not use REPAIR PRICE) for the item, summed for all items for 
+    the MA (D, N, I, P) to get total issue COST. ORG R COST + IMA R COST.
+
+total_repair_replacement_cost - QTY(s) issued for an item x REPAIR NET PRICE (Non-AV DLR/AV DLR) or x UNIT PRICE (Non-repairable/consumable) 
+    for the items, summed for all items for the MA. If REPAIR PRICE not available UNIT used. ORG R/R COST + IMA R/R COST.
+    Always < total_replacement_cost
+    Only 490 instances where total_repair_replacement_cost != total_replacement_cost
+
+total_material_cost - The total amount of cost for all the material used by the Repair Activity to complete the job.
+
+
+
+
+
+
 
     
 
@@ -190,3 +219,4 @@ iuc: intermediate unit commander
 ima: intermediate maintainance activity
 csmp: Current ship's maintenance project
 pms: Planned Maintenance System
+3-M: Maintenance and Material Management
