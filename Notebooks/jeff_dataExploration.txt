@@ -207,8 +207,79 @@ total_material_cost - The total amount of cost for all the material used by the 
 
 
     
+________________________________________________________________________________________________________________________________________________________________________
+Supply Dataset Columns 
 
-#Establish order of command for tycom, ships force, iuc, etc. Understand csmp meaning, deferral/non deferral, other aspects of how the jobs are handled. 
+Columns also present in jobs: jcn, uic, work_center, date_maintenace_action, date_closing, **issue_apl, issue_eic**
+jcn: last 4 digits comes from jsn, this column does not exist in Jobs
+
+document_number: Unique value, can specifically identify a part order.
+
+request_num: Often identical or near identical (1 letter difference) to document_number. Also unique values
+
+requisition_number: Similar to document_number. All 3 of these can likely be removed. 
+
+demand_date: 
+    Date maintenance personnel (SF/IMA) requested parts/material from Supply to perform maintenance
+    Date the parts were requested ranging from 11/1/2017 to 12/4/2022
+
+Note on Dates: 
+#47350 in jobs (11233 do not have a closing value), 35194 in supply (849 do not have a closing value)
+47350 (rows in jobs) - 11233 (closing is NA in jobs) - 35194 (rows in supply) - supply_data['date_closing'].isnull().sum() = 74
+Looks like supply is almost all closed maintenance, while jobs contains some unfinished maintenance records
+
+issue_date: Date Supply Dept personnel (SF/IMA) issued parts/material to maintenance personnel to fix the
+    equipment (APL, EIC, ESWBS) reported on 2K and/or AWR. 
+    ISSUE minus DEMAND DATE for "a matching item" is DAYS AWAITING PARTS. (COULD BE VERY USEFUL)
+    Date the maintenance personnel were supplied the parts from the Supply Dept Personnel 
+    11/3/7017 - 12/9/2022
+    Note: possible outliers/ incorrect entry: 4 observations have issue dates of 10/30/1992. Also, another 7 entries are in 2017 before 11/1. 
+    issue date should be at least the day of the demand date, if not later. 
+    The first demand date is 11/1/2017
+
+
+cwt_hours: Hours elapsed between the order or demand date and the received or issue date. 
+    issue_date - demand_date 
+    Contains some negative values, represents issue_date coming before demand_date. 
+    22893 are positive. Negative values occur when demand_date is after issue_date
+
+niin: 9 digit number identfying the part being ordered.
+    Niin will uniquely identify niin_nomenclature, but the inverse is not true. 
+    Question for later - niin 15040653, 15040647, 15040643, 15040657, 15017411, 15017405 each correspond to Filter Element, Air. Are there any notable differences between these niin's? 
+    There is a similar trend for many niin_nomenclature values
+
+
+niin_nomenclature:
+    Most common entries 
+    Filter element, air [35%]
+    O-Ring [4%]
+    Belt, V [4%]
+    Bearing, Ball, annula [3%]
+    Gasket [2%]
+
+unit_of_issue:A dual alphabetic abbreviation for the unit of issue of the item issued by Supply to maintenance personnel. 91% are EA.
+
+supply_pri: Categorical variable w 4 levels. Almost all = 4
+
+source_code: 
+    61% are A. 8 unique values.  Identifies basis of supply item availability when item requested
+
+
+quantity: Integer from 1 to 2532, some outliers that will need to be handled. Median = 1
+
+unit_price: Individual price of each supply item
+
+total_price = quantity * unit_price
+
+
+
+
+
+Look at differences in supply orders for different work centers, types of jobs, etc. 
+Note to self - Columns in common match up when joined by job_seq
+
+
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Common abbreviations:
 
