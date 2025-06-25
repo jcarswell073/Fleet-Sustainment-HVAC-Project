@@ -6,13 +6,15 @@ The 'Jobs' dataset esentially provides information regarding why a maintenance a
 The 'Supply' dataset describes part orders for jobs in the 'Jobs' dataset. There could be anywhere from zero to several part orders associated with a maintenance record. 
 
 # Our Approach
-We built a Random Forest model predicting the number of days that elapsed between the opening and closing of a maintenance action. 
+We built a Random Forest Regression model to predict the number of days that elapsed between the opening and closing of a maintenance action (maintenance_duration), and also for maintenance actions subsetted to PMS-related work. 
 <br><br>
-We began by fitting a baseline linear regression model to make this prediciton. This model included approximately ten features covering information such as the reason for repair, when it was discovered, where the equipment was located, and the severity of the issue prior to maintenance. 
+Our feature set includes features covering information such as the reason for repair, when a maintenance job was discovered, where on ship the equipment was located, and the severity of the issue prior to maintenance. 
 <br><br>
-After fitting this baseline model with exclusively the categorical and quantitative variables within the dataset, we began considering ways to leverage the information contained in the free-form text columns. 
+After fitting the model with exclusively the categorical and quantitative variables within the dataset, we began considering ways to leverage the information contained in the free-form text columns. 
 Some techniques we applied include Named Entity Recognition (NER), regular expression matching, and the Word2Vec algorithm. 
+<br><br>
+The final models used numeric, categorical, and text-derived features.
 <br>
 
 # Our Takeaways 
-Our model predicting maintenance duration is intended to improve resource and personnel allocation, logistic planning, and reduce unnecessary down time for components of the ship. 
+Our models predicting maintenance duration is intended to improve resource and personnel allocation, logistic planning, and reduce unnecessary down time for components of the ship. 
