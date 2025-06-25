@@ -45,13 +45,13 @@ def create_binary_features(df, column, patterns):
     return pd.DataFrame(features)
 
 # Apply patterns to their specific columns
-def_narrative_features = create_binary_features(merged1, 'def_narrative', def_narrative_patterns)
-closing_narrative_features = create_binary_features(merged1, 'closing_narrative', closing_narrative_patterns)
-csmp_narrative_features = create_binary_features(merged1, 'csmp_narrative_summary', csmp_narrative_patterns)
-nondef_narrative_features = create_binary_features(merged1, 'nondef_narrative', nondef_narrative_patterns)
+def_narrative_features = create_binary_features(hvacdata, 'def_narrative', def_narrative_patterns)
+closing_narrative_features = create_binary_features(hvacdata, 'closing_narrative', closing_narrative_patterns)
+csmp_narrative_features = create_binary_features(hvacdata, 'csmp_narrative_summary', csmp_narrative_patterns)
+nondef_narrative_features = create_binary_features(hvacdata, 'nondef_narrative', nondef_narrative_patterns)
 
 # Combine all features with the original DataFrame
-merged1 = pd.concat([merged1, 
+hvacdata = pd.concat([data, 
                      def_narrative_features, 
                      closing_narrative_features, 
                      csmp_narrative_features, 
@@ -70,4 +70,4 @@ def subset_data_by_keyword(df, keyword, narrative_columns):
 narrative_columns = ['def_narrative', 'nondef_narrative', 'csmp_narrative_summary', 'closing_narrative']
 
 # Subset data for 'PMS'
-pms_related = subset_data_by_keyword(merged1, 'PMS', narrative_columns)
+pms_related = subset_data_by_keyword(hvacdata, 'PMS', narrative_columns)
