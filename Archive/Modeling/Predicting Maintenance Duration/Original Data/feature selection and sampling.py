@@ -35,5 +35,5 @@ n_splits = 5
 skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
 stratified_samples = []
 
-for train_index, _ in skf.split(X_md, merged1["type_of_maintenance_action"]):
+for train_index, _ in skf.split(X_md, hvacdata["type_of_maintenance_action"]):
     stratified_samples.append(X_md.iloc[train_index])
