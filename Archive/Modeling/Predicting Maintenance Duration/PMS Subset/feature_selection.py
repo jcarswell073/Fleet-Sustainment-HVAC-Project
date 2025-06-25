@@ -40,6 +40,9 @@ selected_features = [
     'def_narrative_filter_related', 'def_narrative_coil_related', 'def_narrative_replacement_related'
 ]
 
+pms_related = pms_related.dropna(subset=['maintenance_duration_log'])
+
+
 X_pms = pms_related[selected_features]
 y_pms = pms_related[target]
 
