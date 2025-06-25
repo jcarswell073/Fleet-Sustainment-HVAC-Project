@@ -5,7 +5,7 @@ The data was given in two datasets. <br> <br>
 The 'Jobs' dataset esentially provides information regarding why a maintenance action was necessary, where the problem was located, its level of perceived importance, and the timeline for completion. <br><br>
 The 'Supply' dataset describes part orders for jobs in the 'Jobs' dataset. There could be anywhere from zero to several part orders associated with a maintenance record. 
 
-# Our Approach
+# Modeling
 We built a Random Forest Regression model to predict the number of days that elapsed between the opening and closing of a maintenance action (maintenance_duration), and also for maintenance actions subsetted to PMS-related work. 
 <br><br>
 Our feature set includes features covering information such as the reason for repair, when a maintenance job was discovered, where on ship the equipment was located, and the severity of the issue prior to maintenance. 
