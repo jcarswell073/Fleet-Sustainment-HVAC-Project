@@ -16,7 +16,6 @@ features_md = [
 ]
 
 
-# Drop rows where maintenance_duration is NaN
 hvacdata = hvacdata.dropna(subset=['maintenance_duration'])
 
 
