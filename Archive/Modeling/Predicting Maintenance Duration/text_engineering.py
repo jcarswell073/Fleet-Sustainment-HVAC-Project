@@ -1,3 +1,6 @@
+hvacdata = pd.read_csv('hvac_merged.csv')
+
+
 
 import pandas as pd
 import re
