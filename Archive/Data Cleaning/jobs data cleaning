@@ -1,0 +1,86 @@
+## cleaning for last 22 rows of jobs data
+
+import pandas as pd
+import numpy as np
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+# Load data
+jobs_data = pd.read_csv('cvn-hvac-jobs-data.csv', low_memory=False)
+
+# Remove empty columns
+empty_columns = [col for col in jobs_data if jobs_data[col].isnull().sum() == len(jobs_data)]
+jobs_subset = jobs_data.drop(columns=empty_columns)
+
+# last 22 columns
+columns_to_select = [
+    "opening_ship_system", "closing_ship_system", "job_status", "days_open", "action_taken", 
+    "intermediate_unit_commander_screening", "priority", "component_status", "type_of_availability_needed",
+    "tycom_screening", "when_discovered", "cause", "deferral_reason", "feasible_with_ship_inventory",
+    "feasible_with_additional_dla_inventory", "ship_readiness_effect", "ship"
+]
+last22 = jobs_subset[columns_to_select]
+
+# Drop columns with > 90% missing
+missing_pct = last22.isnull().mean() * 100
+columns_to_keep = missing_pct[missing_pct < 90].index
+last22 = last22[columns_to_keep]
+
+# Fix data types
+for col in last22.select_dtypes(include='object').columns:
+    last22[col] = last22[col].astype('string')
+
+# Fill missing values (categorical: mode or Unknown, numeric: median)
+last22['when_discovered'].fillna('no failure, pms accomplishment only', inplace=True)
+last22['priority'].fillna(last22['priority'].mode()[0], inplace=True)
+last22['deferral_reason'].fillna(last22['deferral_reason'].mode()[0], inplace=True)
+last22['type_of_availability_needed'].fillna(last22['type_of_availability_needed'].mode()[0], inplace=True)
+last22['component_status'].fillna(last22['component_status'].mode()[0], inplace=True)
+
+last22['closing_ship_system'].fillna('Unknown', inplace=True)
+last22['action_taken'].fillna('Unknown', inplace=True)
+last22['intermediate_unit_commander_screening'].fillna('Unknown', inplace=True)
+last22['tycom_screening'].fillna('Unknown', inplace=True)
+
+for column in last22.select_dtypes(include=['int64', 'float64']).columns:
+    last22[column].fillna(last22[column].median(), inplace=True)
+
+# Text preprocessing
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+def preprocess_text(text):
+    tokens = word_tokenize(text.lower())
+    tokens = [word for word in tokens if word.isalnum() and word not in stopwords.words('english')]
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens]
+    return ' '.join(tokens)
+
+last22['action_taken'] = last22['action_taken'].apply(preprocess_text)
+last22['cause'] = last22['cause'].apply(preprocess_text)
+last22['deferral_reason'] = last22['deferral_reason'].apply(preprocess_text)
+
+# Outlier treatment
+def treat_outliers(df, column):
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    df[column] = np.where(df[column] < lower, lower, df[column])
+    df[column] = np.where(df[column] > upper, upper, df[column])
+
+for column in last22.select_dtypes(include=['int64', 'float64']).columns:
+    treat_outliers(last22, column)
+
+# Replace negative days_open with median
+median_days_open = last22[last22['days_open'] >= 0]['days_open'].median()
+last22.loc[last22['days_open'] < 0, 'days_open'] = median_days_open
+
+
+
+last22.to_csv("last22cleaned1.csv", index=False)
+
