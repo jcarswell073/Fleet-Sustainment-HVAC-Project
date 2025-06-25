@@ -13,7 +13,7 @@ Our feature set includes features covering information such as the reason for re
 After fitting the model with exclusively the categorical and quantitative variables within the dataset, we began considering ways to leverage the information contained in the free-form text columns. 
 Some techniques we applied include Named Entity Recognition (NER), regular expression matching, and the Word2Vec algorithm. 
 <br><br>
-The final models used numeric, categorical, and text-derived features.
+Our final models used numeric, categorical, and text-derived features.
 <br>
 
 # Our Takeaways 
