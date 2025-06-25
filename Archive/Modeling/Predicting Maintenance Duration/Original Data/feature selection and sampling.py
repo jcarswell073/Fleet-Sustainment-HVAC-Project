@@ -1,5 +1,10 @@
+
+
 import numpy as np
 import pandas as pd
+
+hvacdata = pd.read_csv('hvac_merged.csv')
+
 
 # target and features
 target_md = 'maintenance_duration'
@@ -9,6 +14,11 @@ features_md = [
     'total_material_cost_log', 'def_narrative_fan_related', 'action_taken_code', 'when_discovered',
     'def_narrative_filter_related', 'def_narrative_coil_related', 'def_narrative_replacement_related'
 ]
+
+
+# Drop rows where maintenance_duration is NaN
+hvacdata = hvacdata.dropna(subset=['maintenance_duration'])
+
 
 X_md = hvacdata[features_md]
 y_md = hvacdata[target_md]
