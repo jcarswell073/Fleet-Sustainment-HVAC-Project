@@ -1,3 +1,9 @@
+import numpy as np
+from scipy.stats import boxcox
+
+
+
+
 # Normalize price/costs
 hvacdata['total_price_log'] = np.log(hvacdata['total_price'] + 1)
 hvacdata['days_open_boxcox'], _ = boxcox(hvacdata['days_open'] + 1)
