@@ -5,6 +5,15 @@ The data was given in two datasets. <br> <br>
 The 'Jobs' dataset esentially provides information regarding why a maintenance action was necessary, where the problem was located, its level of perceived importance, and the timeline for completion. <br><br>
 The 'Supply' dataset describes part orders for jobs in the 'Jobs' dataset. There could be anywhere from zero to several part orders associated with a maintenance record. 
 
+# Data Cleaning and Exploration
+Before modeling, we conducted extensive data cleaning and exploratory data analysis. We:
+- Removed columns with excessive missing values and standardized the data types across both the 'Jobs' and 'Supply' datasets
+- Replaced missing values in categorical columns (either using the mode or creating an “unknown” category) and in numerical columns (using the median)
+- Nomalized skewed numerical features using log transformations and Box-Cox transformations
+- Identified and mitigated outliers using IQR
+- Feature engineered new date-based features (year, month, day of week), and created variables such as maintenance_duration whhich ended up being our models' target variable
+
+
 # Modeling
 We built a Random Forest Regression model to predict the number of days that elapsed between the opening and closing of a maintenance action (maintenance_duration), and also for maintenance actions subsetted to PMS-related work. 
 <br><br>
