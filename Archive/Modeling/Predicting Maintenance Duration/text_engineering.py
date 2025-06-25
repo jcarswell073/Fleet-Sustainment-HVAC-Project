@@ -50,7 +50,7 @@ csmp_narrative_features = create_binary_features(hvacdata, 'csmp_narrative_summa
 nondef_narrative_features = create_binary_features(hvacdata, 'nondef_narrative', nondef_narrative_patterns)
 
 # Combine all features with the original DataFrame
-hvacdata = pd.concat([data, 
+hvacdata = pd.concat([hvacdata, 
                      def_narrative_features, 
                      closing_narrative_features, 
                      csmp_narrative_features, 
