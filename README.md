@@ -25,5 +25,18 @@ Some techniques we applied include Named Entity Recognition (NER), regular expre
 Our final models used numeric, categorical, and text-derived features.
 <br>
 
+# Interactive Dashboard
+
+We also developed an interactive dashboard using Dash and Plotly, which visualizes maintenance activity on a 3D model of an aircraft carrier.
+
+- Displays maintenance jobs by ship compartment in 3D, top, front, and side views
+- Filters by:
+  - Ship
+  - Job maintenance feature (cause, action taken, compartment usage, etc.)
+  - Date range
+  - cost, days open, man-hours
+- Clickable compartments display job details
+- Aggregate statistics by ship (Total Material Cost, Days Open)
+
 # Our Takeaways 
-Our models predicting maintenance duration is intended to improve resource and personnel allocation, logistic planning, and reduce unnecessary down time for components of the ship. 
+Our models predicting maintenance duration and the accompanying interactive dashboard can help improve resource and personnel allocation, logistic planning, and reduce unnecessary down time for components of the ship. 
