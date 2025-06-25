@@ -32,7 +32,7 @@ We also developed an interactive dashboard using Dash and Plotly, which visualiz
 - Displays maintenance jobs by ship compartment in 3D, top, front, and side views
 - Filters by:
   - Ship
-  - Job maintenance feature (cause, action taken, compartment usage, etc.)
+  - Job maintenance feature (cause, action taken, etc.)
   - Date range
   - cost, days open, man-hours
 - Clickable compartments display job details
