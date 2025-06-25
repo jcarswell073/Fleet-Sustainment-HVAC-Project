@@ -1,4 +1,3 @@
-## SUBSET BY PMS TO PREDICT maintenance_duration
 
 import pandas as pd
 import re
