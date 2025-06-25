@@ -6,7 +6,7 @@ The 'Jobs' dataset esentially provides information regarding why a maintenance a
 The 'Supply' dataset describes part orders for jobs in the 'Jobs' dataset. There could be anywhere from zero to several part orders associated with a maintenance record. 
 
 # Data Cleaning and Exploration
-Before modeling, we conducted extensive data cleaning and exploratory data analysis. We:
+Before modeling, we conducted data cleaning and exploratory data analysis. We:
 - Removed columns with excessive missing values and standardized the data types across both the 'Jobs' and 'Supply' datasets
 - Replaced missing values in categorical columns (either using the mode or creating an “unknown” category) and in numerical columns (using the median)
 - Nomalized skewed numerical features using log transformations and Box-Cox transformations
