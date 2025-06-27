@@ -1,0 +1,93 @@
+import pandas as pd
+import numpy as np
+from collections import Counter
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('cvn-hvac-jobs-data.csv', low_memory=False)
+
+l = list((df.columns.values))
+
+empty_columns = []
+for col in df:
+    if df[col].isnull().sum() == len(df):
+        empty_columns.append(col)
+
+jobs_subset = pd.DataFrame() #subsets to ignore columns with no values
+for col in df:
+    if col not in empty_columns:
+        jobs_subset[col] = df[col]
+
+num = range(22,44)
+my_subset = pd.DataFrame() # my own subset of the second 22 columns
+my_subset = jobs_subset.iloc[:,num]
+#my_subset.to_csv('my22.csv')
+
+#jcn - remove, redundant information with other columns (uic, job sequence, work center)
+my_subset = my_subset.drop(columns=['jcn'])
+
+#location - 176 NA's, replace NA's with unknown
+my_subset['location'] = my_subset['location'].astype(str)
+my_subset['location'].fillna('Unknown', inplace=True)
+
+# #mhc - 0 NA's, as is, 16 distinct numbers
+
+# #mho - 0 NA's, as is, 25 distinct numbers
+
+# #mhr - 592 NA's, replaced NA's with the median
+my_subset['mhr'].fillna(0, inplace=True)
+
+# #priority_code - 25 missing, replaced NA's with 0 code (not an official code, but a placeholder for empty cells)
+my_subset['priority_code'] = my_subset['priority_code'].astype(str)
+my_subset['priority_code'].fillna(4, inplace=True)
+#make to mode
+
+# #safety_code - 42,702 NA's, as is ////////need further insight and feedback
+my_subset['safety_code'] = my_subset['safety_code'].astype(str)
+print(my_subset['safety_code'].info())
+
+#status_code - 1 NA, replaced with 0 (code for not applicable)
+my_subset['status_code'] = my_subset['status_code'].astype(str)
+my_subset['status_code'].fillna('0', inplace=True)
+
+#tycom_screening_code - 9,026 NA's (19%), replaced with 0 (placeholder for empty records)
+my_subset['tycom_screening_code'] = my_subset['tycom_screening_code'].astype(str)
+my_subset['tycom_screening_code'].fillna('0', inplace=True)
+
+#type_availability_code - 25 NA's, replaced with mode
+my_subset['type_availability_code'] = my_subset['type_availability_code'].astype(str)
+my_subset['type_availability_code'].fillna(4, inplace=True)
+
+#type_of_maintenance_action - 0 NA's, as is, 2 distinct (D,N)
+
+#when_discovered_code - 0 NA's, as is, 10 distinct
+my_subset['when_discovered_code'] = my_subset['when_discovered_code'].astype(str)
+
+#work_center - 0 NA's, 240 distinct (EA03 - 19%), as is
+
+#total_ima_man_hours - 79 NA's, replaced with median
+#my_subset['total_ima_man_hours'].fillna(my_subset['total_ima_man_hours'].median(), inplace=True)
+
+#total_ship_force_man_hours - 79 NA's, replaced with median
+#my_subset['total_ship_force_man_hours'].fillna(my_subset['total_ship_force_man_hours'].median(), inplace=True)
+#sum of mho and mhc
+
+#total_replacement_cost - 79 NA's, replaced with median
+#my_subset['total_replacement_cost'].fillna(my_subset['total_replacement_cost'].median(), inplace=True)
+
+#total_repair_replacement_cost - 79 NA's, replaced with median
+#my_subset['total_repair_replacement_cost'].fillna(my_subset['total_repair_replacement_cost'].median(), inplace=True)
+
+#def_narrative - 13,501 NA's, replaced with 'Unknown', preprocessing handled below
+my_subset['def_narrative'].fillna('Unknown', inplace=True)
+
+#nondef_narrative - 22,501 NA's, replaced with 'Unknown', preprocessing handled below
+my_subset['nondef_narrative'].fillna('Unknown', inplace=True)
+
+#closing_narrative - 26,364 NA's, replaced with 'Unknown', preprocessing handled below
+my_subset['closing_narrative'].fillna('Unknown', inplace=True)
+
+#ima_narrative - 46,059 NA's, replaced with 'Unknown', preprocessing handled below
+my_subset['ima_narrative'].fillna('Unknown', inplace=True)
+
+#total_material_cost - 33,191 NA's (70%), 1 record had a value of $700k /////need further feedback and help on how to handle missing
+print(my_subset['total_material_cost'].info())
