@@ -3,7 +3,27 @@ job_seq:
 
 action_taken_code: Action taken by sailor due to failure of malfunction of equipment
     ~95% of observed entries are 1,3,4,2
-    About 11k NAs
+    In dec. order of freuqnecy
+
+    1: Maintenance action completed; parts drawn from supply
+    Open_job: Created myself. action_taken_code and action_taken are NA when a job was never closed. 
+    3: Maintenance action completed; no parts required
+    4: Cancelled (deferral will be removed from the CSMP)
+    2: Maintenance action completed; parts not from supply
+    0: None of the above (describe in remarks)
+    2B: Completed; parts not from supply; was necessary
+    6I: All action_taken are NA for this code (333 oocurances)
+    3B: Completed; no parts; was necessary
+    1B: Completed; parts from supply; was necessary
+    5B: All action_taken are NA for this code (141 occurances)
+
+    After replacing the 11223 NAs that are associated with open jobs with 'Open_job, there are 597 remaining NAs. 
+    6I and 3B are the input for 474 of them and they do not have a corresponding text column. 
+    Create a new category Unknown for these 597. 
+
+
+
+
 
 apl: Allowance Parts List 
     2763 unique values 
