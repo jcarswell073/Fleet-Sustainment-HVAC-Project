@@ -602,6 +602,15 @@ supply_pri: Vast majority = 4. Categorical variable with possible values 1,2,3,4
 source_code: A 1-digit A/N code per NAVSUP PUB 485. Identifies basis of supply item availability when item requested; i.e., IS, NIS, LISTED but NC or NC. Paired with FUND CODE 2nd POS for computing "ALLOWANCE EFFECTIVENESS". 
         61% are A. 8 unique values
 
+    A: IS (In Stock) and Listed in COSAL
+    B: NIS (Not In Stock) but Listed in COSAL
+    C: IS but Not Listed in COSAL
+    D: NIS and Not Listed in Cosal, but known to be Used
+    E: IS, Not Listed, and Not authorized
+    F: NIS, Not Listed, Not authorized
+    G: IS, Not Carried - No Usage
+    H: NIS, Not Carried - No Usage 
+
 unit_price: price of each supply unit
 
 total_price: quantity * unit_price
