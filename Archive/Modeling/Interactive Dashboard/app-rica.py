@@ -13,7 +13,7 @@ import dash_bootstrap_components as dbc
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-def import_dataset(df=r'C:\Users\carswje\OneDrive - HII\Documents\GitHub\Fleet-Sustainment-HVAC-Project\Archive\Modeling\Interactive Dashboard\dataset_ri.csv') -> pd.DataFrame:
+def import_dataset(df=r'Archive\Modeling\Interactive Dashboard\dataset_ri.csv') -> pd.DataFrame:
     """
     Read the merged dataset csv and store in variables with the correct datatypes
     Returns a pd.Dataframe of the combined jobs and supply data
@@ -354,7 +354,7 @@ def update_graphs(ship, feature, view, point_size, start_date, end_date):
         geo_scatter.update_yaxes(type='category', categoryorder='array', categoryarray=deck)
 
         geo_title += " - Front View" # graph title
-        image_source = Image.open(r'C:\Users\carswje\OneDrive - HII\Documents\GitHub\Fleet-Sustainment-HVAC-Project\Archive\Modeling\Interactive Dashboard\cvn69-front.png') # add background image
+        image_source = Image.open(r'Archive\Modeling\Interactive Dashboard\cvn69-front.png') # add background image
         geo_scatter.add_layout_image(dict(source=image_source, xref="x", x=1, yref="y", y=32, sizex=18,
                                     sizey=35, sizing="stretch", opacity=0.1, layer="below"))
 
@@ -369,7 +369,7 @@ def update_graphs(ship, feature, view, point_size, start_date, end_date):
         geo_scatter.update_yaxes(type='category', categoryorder='array', categoryarray=deck, range=[0, 25])
 
         geo_title += " - Right-Side View" # graph title
-        image_source = Image.open(r'C:\Users\carswje\OneDrive - HII\Documents\GitHub\Fleet-Sustainment-HVAC-Project\Archive\Modeling\Interactive Dashboard\CVN68-side.png') # add background image
+        image_source = Image.open(r'Archive\Modeling\Interactive Dashboard\CVN68-side.png') # add background image
         geo_scatter.add_layout_image(dict(source=image_source, xref="x", x=-2, yref="y", y=32, sizex=270,
                                           sizey=35, sizing="stretch", opacity=0.15, layer="below"))
         
@@ -385,7 +385,7 @@ def update_graphs(ship, feature, view, point_size, start_date, end_date):
         geo_scatter.update_yaxes(type='category', categoryorder='array', categoryarray=center, range=[0, 25])
 
         geo_title += " - Top View" # graph title
-        image_source = Image.open(r'C:\Users\carswje\OneDrive - HII\Documents\GitHub\Fleet-Sustainment-HVAC-Project\Archive\Modeling\Interactive Dashboard\CVN68-top.png') # add background image
+        image_source = Image.open(r'Archive\Modeling\Interactive Dashboard\CVN68-top.png') # add background image
         geo_scatter.add_layout_image(dict(source=image_source, xref="x", x=0, yref="y", y=18, sizex=280,
                                           sizey=16, sizing="stretch", opacity=0.15, layer="below"))
         

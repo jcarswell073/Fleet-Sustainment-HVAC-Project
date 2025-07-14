@@ -176,6 +176,11 @@ eic: 7 character code. *Not available in appendix
 
 equipment_nomenclature: Description of the equipment as reported by the person involved in the Maintenance Action. 
     - >20000 are 'Vent nonmch Prp'
+    MC: Main Communication
+    1MC: General Announcing System
+    3MC: Damage Control Announcing System
+    5MC: Flight Deck Announcing System
+    IC: Intercom System
 
 eswbs_closing: Expanded Ship Work Breakdown Structure (ESWBS) reported by the ships force during the closing of the Deferral or Non Deferral. 
     - Null for IMA *Need more
@@ -616,3 +621,5 @@ unit_price: price of each supply unit
 total_price: quantity * unit_price
 
 job_seq: A sequential number assigned to each Maintenance Action. 
+
+
