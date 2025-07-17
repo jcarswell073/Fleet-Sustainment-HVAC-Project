@@ -84,6 +84,7 @@ diff-match-patch @ file:///Users/ktietz/demo/mc3/conda-bld/diff-match-patch_1630
 dill @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/dill_1729047982235/work
 distributed @ file:///C:/b/abs_42ljkiheum/croot/distributed_1741988119116/work
 distro @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/distro_1729059153117/work
+docopt==0.6.2
 docstring-to-markdown @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/docstring-to-markdown_1729053922477/work
 docutils @ file:///C:/b/abs_8d42id67ov/croot/docutils_1744664123685/work
 et_xmlfile @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/et_xmlfile_1729053960370/work
@@ -216,6 +217,7 @@ patsy @ file:///C:/b/abs_f9h0eiedk0/croot/patsy_1738159949276/work
 pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
 pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
 pillow @ file:///C:/b/abs_68t826txdy/croot/pillow_1744613085333/work
+pipreqs==0.4.13
 pkce @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pkce_1729049216383/work
 pkginfo @ file:///C:/b/abs_79p91g_cie/croot/pkginfo_1743184772345/work
 platformdirs @ file:///C:/b/abs_ddh15014or/croot/platformdirs_1744273060660/work
@@ -383,6 +385,7 @@ xgboost==3.0.2
 xlwings @ file:///C:/b/abs_e58r82ek19/croot/xlwings_1743513451045/work
 xyzservices @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/xyzservices_1729047258632/work
 yapf @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/yapf_1729057456500/work
+yarg==0.1.10
 yarl @ file:///C:/b/abs_281qby2vim/croot/yarl_1732546854547/work
 zict @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/zict_1729052457267/work
 zipp @ file:///C:/b/abs_2fcpcg89my/croot/zipp_1732630746332/work
