@@ -79,6 +79,14 @@ def import_dataset(df=r'Archive\Modeling\Interactive Dashboard\dataset_ri.csv') 
     dataset['Centerline (Distance)'] = dataset['Centerline (Distance)'].astype('string')
     dataset['Usage'] = dataset['Usage'].astype('string')
 
+    dataset['date_closing'] = dataset['date_closing'].fillna('2022-06-16') #fill with last date so that we can display Open jobs as well
+
+    dataset['totMaterialCost'] = dataset['totMaterialCost'].round(2) #Round for cleaner representation
+
+    dataset['Supplies Ordered'] = dataset['totPrice'].notna().map({True: 'Yes', False: 'No'})
+
+    
+
     return dataset
 
 df = import_dataset()
@@ -150,7 +158,8 @@ columns = {
     'Deck': 'Deck',
     'Frame': 'Frame',
     'Centerline (Distance From)': 'Centerline (Distance)',
-    'Compartment Usage': 'Usage'
+    'Compartment Usage': 'Usage',
+    'Supplies Ordered': 'Supplies Ordered'
 }
 
 ship_name = {
@@ -172,7 +181,7 @@ ship_options.sort()
 
 feature_options = ['When Discovered', 'Cause of Maintenance', 'Component Status',
         'Priority', 'Type of Maintenance Action', 'Type of Availability Needed',
-        'Action Taken', 'Compartment Usage', 'Work Center', 'Deferral Reason', 'EIC']
+        'Action Taken', 'Compartment Usage', 'Work Center', 'Deferral Reason', 'Supplies Ordered', 'Job Status']
 
 maintenance_action_type = {'d': 'Deferred', 'n': 'Non-Deferred'}
 
@@ -214,7 +223,7 @@ controls = dbc.Card([
         html.Div([ # type of view
                 dbc.Label("View"),
                 dbc.RadioItems(
-                    ['Top', 'Front', 'Side', '3D'], '3D', id='view', inline=True)]),
+                    ['Top', 'Front', 'Side', '3D'], 'Side', id='view', inline=True)]),
 
         html.Div([ # date range
                 dbc.Label("Date Range"),
@@ -292,7 +301,7 @@ def update_graphs(ship, feature, view, point_size, start_date, end_date):
     
     # remove duplicate jobs and currently open jobs
     dff = dff.drop_duplicates(subset=['job_seq'])
-    dff = dff.loc[dff['job_status'] == 'closed']
+    #dff = dff.loc[dff['job_status'] == 'closed']
 
     # date range
     if start_date != None:
