@@ -307,7 +307,7 @@ app.layout = dbc.Container([
     Input("point-size", "value"),
     Input("date-range", "start_date"),
     Input("date-range", "end_date"))
-def update_graphs(ship, workcenter, feature, view, point_size, start_date, end_date): ##Here
+def update_graphs(ship, workcenter, feature, view, point_size, start_date, end_date): 
 
     dff = df
 
@@ -317,7 +317,7 @@ def update_graphs(ship, workcenter, feature, view, point_size, start_date, end_d
         dff = dff.loc[dff['ship'] == ship_name[ship]]
 
     if workcenter != 'All Work Centers' :
-        dff = dff.loc[dff['work_center'].astype(str) == workcenter] #**
+        dff = dff.loc[dff['work_center'].astype(str) == workcenter] 
     
 
     # remove duplicate jobs and currently open jobs
